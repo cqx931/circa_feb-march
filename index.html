@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>circa 106 | February-March</title>
+
+        <meta name="viewport"
+            content="width=device-width, 
+			initial-scale=1.0, maximum-scale=1.0, 
+			minimum-scale=1.0, user-scalable=no">
+    </head>
+        
+    <body>
+        <video id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
+        <video id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
+    </body>
+
+</html>
+
+<style>
+
+    video { 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1;
+        transform: translateX(-50%) translateY(-50%);  
+        background-size: cover;
+    }
+
+</style>
+
+<script>
+
+    /*when mouse moves:
+    calculate the position of the mouse in the X axis
+    normalize values from left and right.
+    If the mouse is all the way to the left, left = 1.
+    All the way to the right, right = 1.
+    Right in the middle left = 0.5, right = 0.5
+    Finally, map those values to the opacity of each video
+    */
+    
+    const virgil = document.getElementById('vid-virgil');
+    const snow = document.getElementById('vid-snow');
+
+    onmousemove = function(e){
+        let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
+        let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
+        snow.style.opacity = left;
+        virgil.style.opacity = right;
+    }
+
+    //a map function like in p5js
+    function mapRange (value, a, b, c, d) {
+        // first map value from (a..b) to (0..1)
+        value = (value - a) / (b - a);
+        // then map it from (0..1) to (c..d) and return it
+        return c + value * (d - c);
+    }
+
+</script>
