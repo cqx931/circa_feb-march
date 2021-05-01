@@ -11,6 +11,7 @@
     </head>
 
     <body>
+        <div id="cursor"></div>
         <video id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
         <video id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
     </body>
@@ -18,6 +19,10 @@
 </html>
 
 <style>
+
+    body{
+        cursor: none;
+    }
 
     video {
         position: fixed;
@@ -30,6 +35,15 @@
         z-index: -1;
         transform: translateX(-50%) translateY(-50%);
         background-size: cover;
+    }
+
+    #cursor{
+        width: 48px;
+        height: 48px;
+        background-color: hsl(255,50%,50%);
+        position: fixed;
+        overflow: hidden;
+        transform: rotate(45deg);
     }
 
 </style>
@@ -47,6 +61,7 @@
 
     const virgil = document.getElementById('vid-virgil');
     const snow = document.getElementById('vid-snow');
+    const cursor = document.getElementById('cursor');
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
@@ -68,11 +83,19 @@
         let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
         let vol1 = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
         let vol2 =  1 - vol1;
+        let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
+        let borderCursor = mapRange(e.clientY, 0, window.innerHeight, 0, 24).toFixed(2);
+
         snow.style.opacity = left;
         virgil.style.opacity = right;
         sound1.volume(vol1);
         sound2.volume(vol2);
-        console.log(vol1,vol2);
+        //console.log(vol1,vol2);
+        cursor.style.left = e.clientX - 24 + 'px';
+        cursor.style.top = e.clientY - 24 + 'px';
+
+        cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
+        cursor.style.borderRadius = `${borderCursor}px`;
     }
 
     //a map function like in p5js
