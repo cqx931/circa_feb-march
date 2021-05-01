@@ -5,11 +5,11 @@
         <title>circa 106 | February-March</title>
 
         <meta name="viewport"
-            content="width=device-width, 
-			initial-scale=1.0, maximum-scale=1.0, 
+            content="width=device-width,
+			initial-scale=1.0, maximum-scale=1.0,
 			minimum-scale=1.0, user-scalable=no">
     </head>
-        
+
     <body>
         <video id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
         <video id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
@@ -19,7 +19,7 @@
 
 <style>
 
-    video { 
+    video {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -28,12 +28,12 @@
         width: auto;
         height: auto;
         z-index: -1;
-        transform: translateX(-50%) translateY(-50%);  
+        transform: translateX(-50%) translateY(-50%);
         background-size: cover;
     }
 
 </style>
-
+<script src="howler.min.js"></script>
 <script>
 
     /*when mouse moves:
@@ -44,15 +44,35 @@
     Right in the middle left = 0.5, right = 0.5
     Finally, map those values to the opacity of each video
     */
-    
+
     const virgil = document.getElementById('vid-virgil');
     const snow = document.getElementById('vid-snow');
+
+    const sound1 = new Howl({
+      src: ['sound/pubbulupipo.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0.5
+    });
+    sound1.play();
+    const sound2 = new Howl({
+      src: ['sound/10minMix.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0.5
+    });
+    sound2.play();
 
     onmousemove = function(e){
         let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
         let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
+        let vol1 = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
+        let vol2 =  1 - vol1;
         snow.style.opacity = left;
         virgil.style.opacity = right;
+        sound1.volume(vol1);
+        sound2.volume(vol2);
+        console.log(vol1,vol2);
     }
 
     //a map function like in p5js
@@ -62,5 +82,4 @@
         // then map it from (0..1) to (c..d) and return it
         return c + value * (d - c);
     }
-
 </script>
