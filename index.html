@@ -8,12 +8,17 @@
             content="width=device-width,
 			initial-scale=1.0, maximum-scale=1.0,
 			minimum-scale=1.0, user-scalable=no">
+    <script src="howler.min.js"></script>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     </head>
 
     <body>
         <div id="cursor"></div>
-        <video id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
-        <video id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
+        <div id="waveform"></div>
+        <video preload="auto" id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
+        <video preload="auto" id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
+        <video preload="auto" id="vid-piene" muted autoplay loop src="media/piene.mp4"></video>
+        <video preload="auto" id="vid-new" muted autoplay loop ></video>
     </body>
 
 </html>
@@ -38,16 +43,32 @@
     }
 
     #cursor{
-        width: 48px;
-        height: 48px;
+        width: 16px;
+        height: 16px;
         background-color: hsl(255,50%,50%);
         position: fixed;
         overflow: hidden;
         transform: rotate(45deg);
     }
 
+    #waveform {
+      width: 100%;
+      height: 30%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      opacity: 0.5;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #waveform:hover {
+      opacity: 1;
+    }
+
 </style>
-<script src="howler.min.js"></script>
 <script>
 
     /*when mouse moves:
@@ -61,42 +82,116 @@
 
     const virgil = document.getElementById('vid-virgil');
     const snow = document.getElementById('vid-snow');
+    const piene = document.getElementById('vid-piene');
+    const placeHolder = document.getElementById('vid-new');
+
     const cursor = document.getElementById('cursor');
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
       loop:true,
       autoplay:true,
-      volume:0.5
+      volume:0,
+      pan: -1,
+      onload: () => {
+        sound1.fade(0, 0.5, 3000);
+      }
     });
     sound1.play();
     const sound2 = new Howl({
       src: ['sound/10minMix.mp3'],
       loop:true,
       autoplay:true,
-      volume:0.5
+      volume:0,
+      pan: 1,
+      onload: () => {
+        sound2.fade(0, 0.5, 3000);
+      }
     });
     sound2.play();
+    const sound3 = new Howl({
+      src: ['sound/Altered_loves_unaltered.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0,
+      onload: () => {
+        sound3.fade(0, 0.5, 3000);
+      }
+    });
+    sound3.play();
+    const sound4 = new Howl({
+      src: ['sound/walk.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0,
+      onload: () => {
+        sound4.fade(0, 0.5, 3000);
+      }
+    });
+    sound4.play();
+
+    // Setup the "waveform" animation.
+    var wave = new SiriWave({
+        container: waveform,
+        width: window.innerWidth,
+        height: window.innerHeight * 0.3,
+        cover: true,
+        speed: 0.03,
+        amplitude: 0.7,
+        frequency: 2
+      });
+    wave.start();
+    resize();
+    window.addEventListener('resize', resize);
+
+    // TODO: update siriWave amplitude & other properties from sound level
+    // https://medium.com/swlh/building-a-audio-visualizer-with-javascript-324b8d420e7
+    // siriWave.setAmplitude(amplitue);
 
     onmousemove = function(e){
-        let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
-        let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
-        let vol1 = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
-        let vol2 =  1 - vol1;
-        let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
-        let borderCursor = mapRange(e.clientY, 0, window.innerHeight, 0, 24).toFixed(2);
+      let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
+      let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
+      let top = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
+      let bottom =  1 - top;
 
-        snow.style.opacity = left;
-        virgil.style.opacity = right;
-        sound1.volume(vol1);
-        sound2.volume(vol2);
-        //console.log(vol1,vol2);
-        cursor.style.left = e.clientX - 24 + 'px';
-        cursor.style.top = e.clientY - 24 + 'px';
+      sound1.volume(left);
+      virgil.style.opacity = left;
 
-        cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
-        cursor.style.borderRadius = `${borderCursor}px`;
+      sound2.volume(right);
+      snow.style.opacity = right;
+
+      sound3.volume(top);
+      piene.style.opacity = top;
+
+      sound4.volume(bottom);
+      placeHolder.style.opacity = bottom;
+
+      let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
+      let borderCursor = mapRange(e.clientY, 0, window.innerHeight, 0, 8).toFixed(2);
+
+      cursor.style.left = e.clientX - 8 + 'px';
+      cursor.style.top = e.clientY - 8 + 'px';
+
+      cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
+      cursor.style.borderRadius = `${borderCursor}px`;
     }
+
+
+    // Update the height of the wave animation.
+    // These are basically some hacks to get SiriWave.js to do what we want.
+    function resize() {
+      var height = window.innerHeight * 0.3;
+      var width = window.innerWidth;
+      wave.height = height;
+      wave.height_2 = height / 2;
+      wave.MAX = wave.height_2 - 4;
+      wave.width = width;
+      wave.width_2 = width / 2;
+      wave.width_4 = width / 4;
+      wave.canvas.height = height;
+      wave.canvas.width = width;
+      //wave.container.style.margin = -(height / 2) + 'px auto';
+    };
 
     //a map function like in p5js
     function mapRange (value, a, b, c, d) {
