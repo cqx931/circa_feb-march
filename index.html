@@ -18,7 +18,7 @@
         <video preload="auto" id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
         <video preload="auto" id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
         <video preload="auto" id="vid-piene" muted autoplay loop src="media/piene.mp4"></video>
-        <video preload="auto" id="vid-new" muted autoplay loop ></video>
+        <video preload="auto" id="vid-new" muted autoplay loop src="media/clouds.mp4"></video>
     </body>
 
 </html>
@@ -42,14 +42,47 @@
         background-size: cover;
     }
 
-    #cursor{
-        width: 16px;
-        height: 16px;
-        background-color: hsl(255,50%,50%);
-        position: fixed;
-        overflow: hidden;
-        transform: rotate(45deg);
+    #cursor {
+    width: 20px;
+    height: 20px;
+    border: 1px solid white;
+    border-radius: 50%;
+    position: fixed;
+    animation: cursorAnim .5s infinite alternate;
+    pointer-events: none;
+    cursor:none;
+   }
+
+#cursor::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border: 8px solid gray;
+    border-radius: 50%;
+    opacity: .5;
+    top: -8px;
+    left: -8px;
+    animation: cursorAnim2 .5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+    from {
+        transform: scale(1);
     }
+    to {
+        transform: scale(.7);
+    }
+}
+
+@keyframes cursorAnim2 {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.4);
+    }
+}
 
     #waveform {
       width: 100%;
@@ -58,7 +91,6 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      cursor: pointer;
       opacity: 0.5;
       -webkit-user-select: none;
       user-select: none;
@@ -167,7 +199,7 @@
       placeHolder.style.opacity = bottom;
 
       let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
-      let borderCursor = mapRange(e.clientY, 0, window.innerHeight, 0, 8).toFixed(2);
+      let borderCursor = 10;
 
       cursor.style.left = e.clientX - 8 + 'px';
       cursor.style.top = e.clientY - 8 + 'px';
