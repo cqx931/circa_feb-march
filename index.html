@@ -19,6 +19,8 @@
         <video preload="auto" id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
         <video preload="auto" id="vid-piene" muted autoplay loop src="media/piene.mp4"></video>
         <video preload="auto" id="vid-new" muted autoplay loop src="media/clouds.mp4"></video>
+
+        <canvas id="canvas" width="1000px" height="200px"></canvas>
     </body>
 
 </html>
@@ -27,6 +29,7 @@
 
     body{
         cursor: none;
+        margin:0;
     }
 
     video {
@@ -96,11 +99,21 @@
       user-select: none;
     }
 
-    #waveform:hover {
+    #waveform:hover, #canvas:hover{
       opacity: 1;
     }
 
+    #canvas {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
+    }
+
 </style>
+
 <script>
 
     /*when mouse moves:
@@ -232,4 +245,41 @@
         // then map it from (0..1) to (c..d) and return it
         return c + value * (d - c);
     }
+</script>
+<script type="text/javascript">
+const WIDTH = window.innerWidth, HEIGHT = 300;
+//https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound
+var analyser = Howler.ctx.createAnalyser();
+analyser.fftSize = 1024;
+Howler.masterGain.connect(analyser);
+// Connect the analyser -> destination
+analyser.connect(Howler.ctx.destination);
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+
+const canvas = document.getElementById('canvas');
+const canvasCtx = canvas.getContext("2d"); // 2d?
+
+var barWidth = (WIDTH / bufferLength) * 2.5;
+var barHeight;
+
+console.log(HEIGHT, WIDTH, dataArray);
+
+function draw() {
+      drawVisual = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+      //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      var x = 0;
+       for(var i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i]/2;
+        canvasCtx.fillStyle = 'rgb(255,255,255)';
+        //canvasCtx.fillRect(x,HEIGHT/2,barWidth,barHeight);
+        canvasCtx.fillRect(x,HEIGHT/3,barWidth,barHeight);
+        x += barWidth + 1;
+      }
+}
+
+draw();
+
 </script>
