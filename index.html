@@ -8,12 +8,19 @@
             content="width=device-width,
 			initial-scale=1.0, maximum-scale=1.0,
 			minimum-scale=1.0, user-scalable=no">
+    <script src="howler.min.js"></script>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     </head>
 
     <body>
         <div id="cursor"></div>
-        <video id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
-        <video id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
+        <div id="waveform"></div>
+        <video preload="auto" id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
+        <video preload="auto" id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
+        <video preload="auto" id="vid-piene" muted autoplay loop src="media/piene.mp4"></video>
+        <video preload="auto" id="vid-new" muted autoplay loop src="media/clouds.mp4"></video>
+
+        <canvas id="canvas" width="1000px" height="200px"></canvas>
     </body>
 
 </html>
@@ -22,6 +29,7 @@
 
     body{
         cursor: none;
+        margin:0;
     }
 
     video {
@@ -37,17 +45,75 @@
         background-size: cover;
     }
 
-    #cursor{
-        width: 48px;
-        height: 48px;
-        background-color: hsl(255,50%,50%);
-        position: fixed;
-        overflow: hidden;
-        transform: rotate(45deg);
+    #cursor {
+    width: 20px;
+    height: 20px;
+    border: 1px solid white;
+    border-radius: 50%;
+    position: fixed;
+    animation: cursorAnim .5s infinite alternate;
+    pointer-events: none;
+    cursor:none;
+   }
+
+#cursor::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    border: 8px solid gray;
+    border-radius: 50%;
+    opacity: .5;
+    top: -8px;
+    left: -8px;
+    animation: cursorAnim2 .5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.7);
+    }
+}
+
+@keyframes cursorAnim2 {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(.4);
+    }
+}
+
+    #waveform {
+      width: 100%;
+      height: 30%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #waveform:hover, #canvas:hover{
+      opacity: 1;
+    }
+
+    #canvas {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.5;
     }
 
 </style>
-<script src="howler.min.js"></script>
+
 <script>
 
     /*when mouse moves:
@@ -61,42 +127,116 @@
 
     const virgil = document.getElementById('vid-virgil');
     const snow = document.getElementById('vid-snow');
+    const piene = document.getElementById('vid-piene');
+    const placeHolder = document.getElementById('vid-new');
+
     const cursor = document.getElementById('cursor');
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
       loop:true,
       autoplay:true,
-      volume:0.5
+      volume:0,
+      pan: -1,
+      onload: () => {
+        sound1.fade(0, 0.5, 3000);
+      }
     });
     sound1.play();
     const sound2 = new Howl({
       src: ['sound/10minMix.mp3'],
       loop:true,
       autoplay:true,
-      volume:0.5
+      volume:0,
+      pan: 1,
+      onload: () => {
+        sound2.fade(0, 0.5, 3000);
+      }
     });
     sound2.play();
+    const sound3 = new Howl({
+      src: ['sound/Altered_loves_unaltered.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0,
+      onload: () => {
+        sound3.fade(0, 0.5, 3000);
+      }
+    });
+    sound3.play();
+    const sound4 = new Howl({
+      src: ['sound/walk.mp3'],
+      loop:true,
+      autoplay:true,
+      volume:0,
+      onload: () => {
+        sound4.fade(0, 0.5, 3000);
+      }
+    });
+    sound4.play();
+
+    // Setup the "waveform" animation.
+    var wave = new SiriWave({
+        container: waveform,
+        width: window.innerWidth,
+        height: window.innerHeight * 0.3,
+        cover: true,
+        speed: 0.03,
+        amplitude: 0.7,
+        frequency: 2
+      });
+    wave.start();
+    resize();
+    window.addEventListener('resize', resize);
+
+    // TODO: update siriWave amplitude & other properties from sound level
+    // https://medium.com/swlh/building-a-audio-visualizer-with-javascript-324b8d420e7
+    // siriWave.setAmplitude(amplitue);
 
     onmousemove = function(e){
-        let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
-        let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
-        let vol1 = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
-        let vol2 =  1 - vol1;
-        let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
-        let borderCursor = mapRange(e.clientY, 0, window.innerHeight, 0, 24).toFixed(2);
+      let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
+      let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
+      let top = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
+      let bottom =  1 - top;
 
-        snow.style.opacity = left;
-        virgil.style.opacity = right;
-        sound1.volume(vol1);
-        sound2.volume(vol2);
-        //console.log(vol1,vol2);
-        cursor.style.left = e.clientX - 24 + 'px';
-        cursor.style.top = e.clientY - 24 + 'px';
+      sound1.volume(left);
+      virgil.style.opacity = left;
 
-        cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
-        cursor.style.borderRadius = `${borderCursor}px`;
+      sound2.volume(right);
+      snow.style.opacity = right;
+
+      sound3.volume(top);
+      piene.style.opacity = top;
+
+      sound4.volume(bottom);
+      placeHolder.style.opacity = bottom;
+
+      let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
+      let borderCursor = 10;
+
+      cursor.style.left = e.clientX - 8 + 'px';
+      cursor.style.top = e.clientY - 8 + 'px';
+
+      cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
+      cursor.style.borderRadius = `${borderCursor}px`;
     }
+
+
+    // Update the height of the wave animation.
+    // These are basically some hacks to get SiriWave.js to do what we want.
+    function resize() {
+      var height = window.innerHeight * 0.3;
+      var width = window.innerWidth;
+      wave.height = height;
+      wave.height_2 = height / 2;
+      wave.MAX = wave.height_2 - 4;
+      wave.width = width;
+      wave.width_2 = width / 2;
+      wave.width_4 = width / 4;
+      wave.canvas.height = height;
+      wave.canvas.width = width;
+      //wave.container.style.margin = -(height / 2) + 'px auto';
+    };
 
     //a map function like in p5js
     function mapRange (value, a, b, c, d) {
@@ -105,4 +245,41 @@
         // then map it from (0..1) to (c..d) and return it
         return c + value * (d - c);
     }
+</script>
+<script type="text/javascript">
+const WIDTH = window.innerWidth, HEIGHT = 300;
+//https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound
+var analyser = Howler.ctx.createAnalyser();
+analyser.fftSize = 1024;
+Howler.masterGain.connect(analyser);
+// Connect the analyser -> destination
+analyser.connect(Howler.ctx.destination);
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+
+const canvas = document.getElementById('canvas');
+const canvasCtx = canvas.getContext("2d"); // 2d?
+
+var barWidth = (WIDTH / bufferLength) * 2.5;
+var barHeight;
+
+console.log(HEIGHT, WIDTH, dataArray);
+
+function draw() {
+      drawVisual = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+      //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      var x = 0;
+       for(var i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i]/2;
+        canvasCtx.fillStyle = 'rgb(255,255,255)';
+        //canvasCtx.fillRect(x,HEIGHT/2,barWidth,barHeight);
+        canvasCtx.fillRect(x,HEIGHT/3,barWidth,barHeight);
+        x += barWidth + 1;
+      }
+}
+
+draw();
+
 </script>
