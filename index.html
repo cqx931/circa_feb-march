@@ -14,11 +14,31 @@
 
     <body>
         <div id="cursor"></div>
-        <div id="waveform"></div>
-        <video preload="auto" id="vid-snow" muted autoplay loop src="media/snow.mp4"></video>
-        <video preload="auto" id="vid-virgil" muted autoplay loop src="media/virgil.mp4"></video>
-        <video preload="auto" id="vid-piene" muted autoplay loop src="media/piene.mp4"></video>
-        <video preload="auto" id="vid-new" muted autoplay loop src="media/clouds.mp4"></video>
+        <!-- <div id="waveform"></div> -->
+        <video preload="auto" id="vid-snow" muted autoplay loop>
+        	 <source src="media_c/snow.webm" 
+          type='video/webm;codecs="vp8, vorbis"'/>
+             <source src="media_c/snow.mp4"
+          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        </video>
+        <video preload="auto" id="vid-virgil" muted autoplay loop>
+        	 <source src="media_c/virgil.webm" 
+          type='video/webm;codecs="vp8, vorbis"'/>
+             <source src="media_c/virgil.mp4"
+          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        </video>
+        <video preload="auto" id="vid-piene" muted autoplay loop>
+        	 <source src="media_c/piene.webm" 
+          type='video/webm;codecs="vp8, vorbis"'/>
+             <source src="media_c/piene.mp4"
+          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        </video>
+        <video preload="auto" id="vid-new" muted autoplay loop >
+        	 <source src="media_c/clouds.webm" 
+          type='video/webm;codecs="vp8, vorbis"'/>
+             <source src="media_c/clouds.mp4"
+          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        </video>
 
         <canvas id="canvas" width="1000px" height="200px"></canvas>
     </body>
@@ -176,18 +196,18 @@
     sound4.play();
 
     // Setup the "waveform" animation.
-    var wave = new SiriWave({
-        container: waveform,
-        width: window.innerWidth,
-        height: window.innerHeight * 0.3,
-        cover: true,
-        speed: 0.03,
-        amplitude: 0.7,
-        frequency: 2
-      });
-    wave.start();
-    resize();
-    window.addEventListener('resize', resize);
+    // var wave = new SiriWave({
+    //     container: waveform,
+    //     width: window.innerWidth,
+    //     height: window.innerHeight * 0.3,
+    //     cover: true,
+    //     speed: 0.03,
+    //     amplitude: 0.7,
+    //     frequency: 2
+    //   });
+    // wave.start();
+    //resize();
+    //window.addEventListener('resize', resize);
 
     // TODO: update siriWave amplitude & other properties from sound level
     // https://medium.com/swlh/building-a-audio-visualizer-with-javascript-324b8d420e7
@@ -265,8 +285,8 @@ var barHeight;
 
 console.log(HEIGHT, WIDTH, dataArray);
 
-function draw() {
-      drawVisual = requestAnimationFrame(draw);
+function drawBars() {
+      drawVisual = requestAnimationFrame(drawBars);
       analyser.getByteFrequencyData(dataArray);
       //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -280,6 +300,22 @@ function draw() {
       }
 }
 
-draw();
+function drawLines() {
+      drawVisual = requestAnimationFrame(drawLines);
+      analyser.getByteFrequencyData(dataArray);
+      //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      var x = 0;
+      for(var i = 0; i < bufferLength; i++) {
+        canvasCtx.strokeStyle = "#FFF";
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(i,0);
+        canvasCtx.lineTo(x, dataArray[i]);
+        canvasCtx.stroke();
+        x += barWidth + 1;
+      }
+}
+
+drawLines();
 
 </script>
