@@ -13,6 +13,7 @@
     </head>
 
     <body>
+      <div id='loading-bg'></div>
         <div id="cursor">
           <div id="N"></div>
           <div id="S"></div>
@@ -53,8 +54,15 @@
 <style>
 
     body{
-        cursor: none;
         margin:0;
+    }
+
+    #loading-bg{
+      background-color: #aaa;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      transition: opacity 8s 2s;
     }
 
     video {
@@ -77,6 +85,9 @@
   grid-template-columns: repeat(4, 15px);
   grid-template-rows: repeat(4, 15px);
   position: fixed;
+  z-index: 100;
+  left: calc(50vw - 20px);
+  top: calc(50vh - 20px);
 }
 
 #cursor div{
@@ -210,48 +221,52 @@ OLD CURSOR*/
     const cE = document.getElementById('E');
     const cW = document.getElementById('W');
 
+    const loadingBG = document.getElementById('loading-bg');
+
+    let cursorWasPicked = false;
+
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
       loop:true,
-      autoplay:true,
       volume:0,
       pan: -1,
       onload: () => {
         sound1.fade(0, 0.5, 3000);
       }
     });
-    sound1.play();
+
     const sound2 = new Howl({
       src: ['sound/10minMix.mp3'],
       loop:true,
-      autoplay:true,
       volume:0,
       pan: 1,
       onload: () => {
         sound2.fade(0, 0.5, 3000);
       }
     });
-    sound2.play();
+
     const sound3 = new Howl({
       src: ['sound/Altered_loves_unaltered.mp3'],
       loop:true,
-      autoplay:true,
       volume:0,
       onload: () => {
         sound3.fade(0, 0.5, 3000);
       }
     });
-    sound3.play();
+
     const sound4 = new Howl({
       src: ['sound/walk.mp3'],
       loop:true,
-      autoplay:true,
       volume:0,
       onload: () => {
         sound4.fade(0, 0.5, 3000);
       }
     });
-    sound4.play();
+
+    cursor.onmouseenter = function(){
+      console.log('enteredC');
+      cursorWasPicked = true;
+    }
 
     // Setup the "waveform" animation.
     // var wave = new SiriWave({
@@ -271,48 +286,61 @@ OLD CURSOR*/
     // https://medium.com/swlh/building-a-audio-visualizer-with-javascript-324b8d420e7
     // siriWave.setAmplitude(amplitue);
 
-    onmousemove = function(e){
-      let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
-      let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
-      let top = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
-      let bottom =  1 - top;
+      let runOnce = false;
+      onmousemove = function(e){
+        if (cursorWasPicked){
+          if(runOnce === false){
+            document.body.style.cursor = 'none';
+            loadingBG.style.opacity = 0;
+            sound1.play();
+            sound2.play();
+            sound3.play();
+            sound4.play();
+            runOnce = true;
+          }
 
-      sound1.volume(left);
-      virgil.style.opacity = left;
+          let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1).toFixed(2);
+          let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0).toFixed(2);
+          let top = mapRange(e.clientY, 0, window.innerHeight, 0,1).toFixed(2);
+          let bottom =  1 - top;
 
-      sound2.volume(right);
-      snow.style.opacity = right;
+          sound1.volume(left);
+          virgil.style.opacity = left;
 
-      sound3.volume(top);
-      piene.style.opacity = top;
+          sound2.volume(right);
+          snow.style.opacity = right;
 
-      sound4.volume(bottom);
-      placeHolder.style.opacity = bottom;
+          sound3.volume(top);
+          piene.style.opacity = top;
 
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+          sound4.volume(bottom);
+          placeHolder.style.opacity = bottom;
 
-      let transformN = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,50).toFixed(2);
-      cN.style.transform = `rotate(${transformN}deg) translateY(${transformN / 12}px)`;
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
 
-      let transformS = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,210).toFixed(2);
-      cS.style.transform = `rotate(${transformS}deg) translateY(${transformS / 6}px)`;
+          let transformN = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,50).toFixed(2);
+          cN.style.transform = `rotate(${transformN}deg) translateY(${transformN / 12}px)`;
 
-      let transformE = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,210).toFixed(2);
-      cE.style.transform = `rotate(${transformE}deg) translateX(${transformE / 6}px)`;
+          let transformS = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,210).toFixed(2);
+          cS.style.transform = `rotate(${transformS}deg) translateY(${transformS / 6}px)`;
 
-      let transformW = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,170).toFixed(2);
-      cW.style.transform = `rotate(${transformW}deg) translateX(${transformW / 10}px)`;
+          let transformE = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,210).toFixed(2);
+          cE.style.transform = `rotate(${transformE}deg) translateX(${transformE / 6}px)`;
+
+          let transformW = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,170).toFixed(2);
+          cW.style.transform = `rotate(${transformW}deg) translateX(${transformW / 10}px)`;
 
 
-      /* OLD CURSOR JS
-      let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
-      let borderCursor = 10;
+          /* OLD CURSOR JS
+          let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
+          let borderCursor = 10;
 
-      cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
-      cursor.style.borderRadius = `${borderCursor}px`;
-       OLD CURSOR JS*/
-    }
+          cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
+          cursor.style.borderRadius = `${borderCursor}px`;
+          OLD CURSOR JS*/
+        }
+      }
 
 
 
