@@ -13,7 +13,12 @@
     </head>
 
     <body>
-        <div id="cursor"></div>
+        <div id="cursor">
+          <div id="N"></div>
+          <div id="S"></div>
+          <div id="E"></div>
+          <div id="W"></div>
+        </div>
         <!-- <div id="waveform"></div> -->
         <video preload="auto" id="vid-snow" muted autoplay loop>
         	 <source src="media_c/snow.webm" 
@@ -65,6 +70,52 @@
         background-size: cover;
     }
 
+#cursor{
+  width: 60px;
+  height: 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 15px);
+  grid-template-rows: repeat(4, 15px);
+  position: fixed;
+}
+
+#cursor div{
+  background-color: white;
+}
+
+#N{
+  width: 2px;
+  height: 30px;
+  grid-column: 3;
+  grid-row: 1 / 4;
+}
+
+
+#S{
+  width: 2px;
+  height: 30px;
+  grid-column: 3;
+  grid-row: 3 / 4;
+}
+
+
+#E{
+  width: 30px;
+  height: 2px;
+  grid-column: 3 / 4;
+  grid-row: 3;
+}
+
+
+#W{
+  width: 30px;
+  height: 2px;
+  grid-column: 1 / 3;
+  grid-row: 3;
+}
+
+/* OLD CURSOR
+
     #cursor {
     width: 20px;
     height: 20px;
@@ -76,18 +127,18 @@
     cursor:none;
    }
 
-#cursor::after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    border: 8px solid gray;
-    border-radius: 50%;
-    opacity: .5;
-    top: -8px;
-    left: -8px;
-    animation: cursorAnim2 .5s infinite alternate;
-}
+  #cursor::after {
+      content: "";
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      border: 8px solid gray;
+      border-radius: 50%;
+      opacity: .5;
+      top: -8px;
+      left: -8px;
+      animation: cursorAnim2 .5s infinite alternate;
+  }
 
 @keyframes cursorAnim {
     from {
@@ -106,6 +157,8 @@
         transform: scale(.4);
     }
 }
+
+OLD CURSOR*/
 
     #waveform {
       width: 100%;
@@ -151,6 +204,11 @@
     const placeHolder = document.getElementById('vid-new');
 
     const cursor = document.getElementById('cursor');
+
+    const cN = document.getElementById('N');
+    const cS = document.getElementById('S');
+    const cE = document.getElementById('E');
+    const cW = document.getElementById('W');
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
@@ -231,15 +289,31 @@
       sound4.volume(bottom);
       placeHolder.style.opacity = bottom;
 
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+
+      let transformN = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,50).toFixed(2);
+      cN.style.transform = `rotate(${transformN}deg) translateY(${transformN / 12}px)`;
+
+      let transformS = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,210).toFixed(2);
+      cS.style.transform = `rotate(${transformS}deg) translateY(${transformS / 6}px)`;
+
+      let transformE = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,210).toFixed(2);
+      cE.style.transform = `rotate(${transformE}deg) translateX(${transformE / 6}px)`;
+
+      let transformW = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,170).toFixed(2);
+      cW.style.transform = `rotate(${transformW}deg) translateX(${transformW / 10}px)`;
+
+
+      /* OLD CURSOR JS
       let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
       let borderCursor = 10;
 
-      cursor.style.left = e.clientX - 8 + 'px';
-      cursor.style.top = e.clientY - 8 + 'px';
-
       cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
       cursor.style.borderRadius = `${borderCursor}px`;
+       OLD CURSOR JS*/
     }
+
 
 
     // Update the height of the wave animation.
