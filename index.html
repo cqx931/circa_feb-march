@@ -15,44 +15,39 @@
       <div id="loading"><div id="title">
         <span class="main">A Digital(-is) Wander</span><br><span class="sub">interchangeable scenes manipulated with the <i id="change">fingertips</i> within proper tolerances</span>
       </div></div>
+      <div id="instructions">hover/tap on the cross to continue</div>
         <div id="cursor">
-          <div id="N"></div>
-          <div id="S"></div>
-          <div id="E"></div>
-          <div id="W"></div>
+          <div class="glow" id="N"></div>
+          <div class="glow" id="S"></div>
+          <div class="glow" id="E"></div>
+          <div class="glow" id="W"></div>
         </div>
         <!-- <div id="waveform"></div> -->
 
-        <video onload="videoOnLoad" preload="auto" id="vid-snow" muted="" autoplay="" loop="">
+        <video onload="videoOnLoad" preload="auto" id="vid-snow" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
            <source src="media_c/snow.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
              <source src="media_c/snow.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-virgil" muted="" autoplay="" loop="">
+        <video onload="videoOnLoad" preload="auto" id="vid-virgil" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
            <source src="media_c/virgil.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
              <source src="media_c/virgil.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-piene" muted="" autoplay="" loop="">
+        <video onload="videoOnLoad" preload="auto" id="vid-piene" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
         	 <source src="media_c/piene.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
              <source src="media_c/piene.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-new" muted="" autoplay="" loop="">
+        <video onload="videoOnLoad" preload="auto" id="vid-new" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
         	 <source src="media_c/clouds.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
              <source src="media_c/clouds.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
 
-
-        <canvas id="canvas" width="1000px" height="200px"></canvas>
-
-
-
+        <canvas id="canvas" height="200px"></canvas>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gudea&display=swap" rel="stylesheet">
 
 <style>
-@font-face {
-  font-family: "Gudea";
-  src: local("fonts/Gudea-Regular.ttf") format("truetype");
-  font-weight:  400;
-  font-style:   regular;
-}
+
 @font-face {
   font-family: "zarathustra";
   src: local("fonts/zarathustra.otf") format("otf");
@@ -69,7 +64,6 @@
       overflow: hidden;
       transition: opacity 8s 2s;
       text-align: center;
-      font-family: monospace;
       color:white;
     }
     #title {
@@ -84,7 +78,7 @@
       font-family: "zarathustra", monospace;
     }
     #loading .sub {
-      font-family: "Gudea";
+      font-family: "Gudea", sans-serif;
       display:inline-block;
       margin-top: 10px;
       font-size: 16px;
@@ -123,6 +117,16 @@
   background-color: white;
 }
 
+@keyframes glow{
+  0%{box-shadow: 0px 0px 3px wheat;}
+  50% {box-shadow: 0px 0px 12px wheat; }
+  0%{box-shadow: 0px 0px 3px wheat;}
+}
+
+.glow{
+  animation: glow 2s infinite;
+}
+
 #N{
   width: 2px;
   height: 30px;
@@ -152,6 +156,19 @@
   height: 2px;
   grid-column: 1 / 3;
   grid-row: 3;
+}
+
+#instructions{
+  position: fixed;
+  bottom: 20px;
+  width: 90%;
+  text-align: center;
+  margin-left: 5%;
+  font-family: "zarathustra", monospace;
+  color: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1000ms;
 }
 
 /* OLD CURSOR
@@ -252,9 +269,19 @@ OLD CURSOR*/
     const cE = document.getElementById('E');
     const cW = document.getElementById('W');
 
+    const instructions = document.getElementById('instructions');
+
     const loadingBG = document.getElementById('loading');
 
     let cursorWasPicked = false;
+
+    setTimeout(() => {
+      instructions.style.opacity = 0.8;
+    }, 5000);
+
+    setTimeout(() => {
+      instructions.style.opacity = 0;
+    }, 25000);
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
@@ -350,6 +377,11 @@ OLD CURSOR*/
             sound2.play();
             sound3.play();
             sound4.play();
+            cN.classList.remove('glow');
+            cS.classList.remove('glow');
+            cE.classList.remove('glow');
+            cW.classList.remove('glow');
+            instructions.style.opacity = 0;
             runOnce = true;
           }
 
@@ -436,6 +468,8 @@ OLD CURSOR*/
 </script>
 <script type="text/javascript">
 const WIDTH = window.innerWidth, HEIGHT = 300;
+
+
 //https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound
 var analyser = Howler.ctx.createAnalyser();
 analyser.fftSize = 1024;
@@ -447,7 +481,8 @@ var dataArray = new Uint8Array(bufferLength);
 
 const canvas = document.getElementById('canvas');
 const canvasCtx = canvas.getContext("2d"); // 2d?
-
+canvasCtx.width  = window.innerWidth;
+canvas.width = window.innerWidth;
 var barWidth = (WIDTH / bufferLength) * 2.5;
 var barHeight;
 
