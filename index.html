@@ -1,221 +1,190 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        <title>circa 106 | February-March</title>
+  <title>circa 106 | February-March</title>
 
-        <meta name="viewport" content="width=device-width,
+  <meta name="viewport" content="width=device-width,
 			initial-scale=1.0, maximum-scale=1.0,
 			minimum-scale=1.0, user-scalable=no">
-    <script src="howler.min.js"></script>
-    </head>
+  <script src="howler.min.js"></script>
+</head>
 
-    <body>
-      <div id="loading"><div id="title">
-        <span class="main">A Digital(-is) Wander</span><br><span class="sub">interchangeable scenes manipulated with the <i id="change">fingertips</i> within proper tolerances</span>
-      </div></div>
-      <div id="instructions">hover/tap on the cross to continue</div>
-        <div id="cursor">
-          <div class="glow" id="N"></div>
-          <div class="glow" id="S"></div>
-          <div class="glow" id="E"></div>
-          <div class="glow" id="W"></div>
-        </div>
-        <!-- <div id="waveform"></div> -->
+<body>
+  <div id="loading">
+    <div id="title">
+      <span class="main">A Digital(-is) Wander</span><br><span class="sub">interchangeable scenes manipulated with the <i id="change">fingertips</i> within proper tolerances</span>
+    </div>
+  </div>
+  <div id="instructions">hover/tap on the cross to continue</div>
+  <div id="cursor">
+    <div class="glow" id="N"></div>
+    <div class="glow" id="S"></div>
+    <div class="glow" id="E"></div>
+    <div class="glow" id="W"></div>
+  </div>
+  <!-- <div id="waveform"></div> -->
 
-        <video onload="videoOnLoad" preload="auto" id="vid-snow" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
-           <source src="media_c/snow.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
-             <source src="media_c/snow.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
-        </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-virgil" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
-           <source src="media_c/virgil.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
-             <source src="media_c/virgil.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
-        </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-piene" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
-        	 <source src="media_c/piene.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
-             <source src="media_c/piene.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
-        </video>
-        <video onload="videoOnLoad" preload="auto" id="vid-new" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
-        	 <source src="media_c/clouds.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
-             <source src="media_c/clouds.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
-        </video>
+  <video onload="videoOnLoad" preload="auto" id="vid-snow" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
+    <source src="media_c/snow.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+    <source src="media_c/snow.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+  </video>
+  <video onload="videoOnLoad" preload="auto" id="vid-virgil" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
+    <source src="media_c/virgil.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+    <source src="media_c/virgil.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+  </video>
+  <video onload="videoOnLoad" preload="auto" id="vid-piene" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
+    <source src="media_c/piene.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+    <source src="media_c/piene.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+  </video>
+  <video onload="videoOnLoad" preload="auto" id="vid-new" controlsList="nodownload" muted autoplay playsinline loop disablePictureInPicture>
+    <source src="media_c/clouds.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+    <source src="media_c/clouds.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+  </video>
 
-        <canvas id="canvas" height="200px"></canvas>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Gudea&display=swap" rel="stylesheet">
+  <canvas id="canvas" height="200px"></canvas>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gudea&display=swap" rel="stylesheet">
 
-<style>
-
-@font-face {
-  font-family: "zarathustra";
-  src: local("fonts/zarathustra.otf") format("otf");
-  font-weight:  400;
-}
-    body{
-        margin:0;
+  <style>
+    @font-face {
+      font-family: "zarathustra";
+      src: local("fonts/zarathustra.otf") format("otf");
+      font-weight: 400;
     }
 
-    #loading{
+    body {
+      margin: 0;
+    }
+
+    #loading {
       background-color: black;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
       transition: opacity 8s 2s;
       text-align: center;
-      color:white;
+      color: white;
     }
+
     #title {
       position: absolute;
       left: 0;
       top: 50%;
-      width:100vw;
+      width: 100vw;
       transform: translateY(-50%);
     }
+
     #loading .main {
       font-size: 32px;
       font-family: "zarathustra", monospace;
     }
+
     #loading .sub {
       font-family: "Gudea", sans-serif;
-      display:inline-block;
+      display: inline-block;
       margin-top: 10px;
       font-size: 16px;
     }
+
     #change {
-      width:105px;
-      display:inline-block;
+      width: 105px;
+      display: inline-block;
     }
 
     video {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        z-index: -1;
-        transform: translateX(-50%) translateY(-50%);
-        background-size: cover;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      transform: translateX(-50%) translateY(-50%);
+      background-size: cover;
     }
-
-#cursor{
-  width: 60px;
-  height: 60px;
-  display: grid;
-  grid-template-columns: repeat(4, 15px);
-  grid-template-rows: repeat(4, 15px);
-  position: fixed;
-  z-index: 100;
-  left: calc(50vw - 20px);
-  top: calc(50vh + 100px);
-}
-
-#cursor div{
-  background-color: white;
-}
-
-@keyframes glow{
-  0%{box-shadow: 0px 0px 3px wheat;}
-  50% {box-shadow: 0px 0px 12px wheat; }
-  0%{box-shadow: 0px 0px 3px wheat;}
-}
-
-.glow{
-  animation: glow 2s infinite;
-}
-
-#N{
-  width: 2px;
-  height: 30px;
-  grid-column: 3;
-  grid-row: 1 / 4;
-}
-
-
-#S{
-  width: 2px;
-  height: 30px;
-  grid-column: 3;
-  grid-row: 3 / 4;
-}
-
-
-#E{
-  width: 30px;
-  height: 2px;
-  grid-column: 3 / 4;
-  grid-row: 3;
-}
-
-
-#W{
-  width: 30px;
-  height: 2px;
-  grid-column: 1 / 3;
-  grid-row: 3;
-}
-
-#instructions{
-  position: fixed;
-  bottom: 20px;
-  width: 90%;
-  text-align: center;
-  margin-left: 5%;
-  font-family: "zarathustra", monospace;
-  color: white;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1000ms;
-}
-
-/* OLD CURSOR
 
     #cursor {
-    width: 20px;
-    height: 20px;
-    border: 1px solid white;
-    border-radius: 50%;
-    position: fixed;
-    animation: cursorAnim .5s infinite alternate;
-    pointer-events: none;
-    cursor:none;
-   }
-
-  #cursor::after {
-      content: "";
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      border: 8px solid gray;
-      border-radius: 50%;
-      opacity: .5;
-      top: -8px;
-      left: -8px;
-      animation: cursorAnim2 .5s infinite alternate;
-  }
-
-@keyframes cursorAnim {
-    from {
-        transform: scale(1);
+      width: 60px;
+      height: 60px;
+      display: grid;
+      grid-template-columns: repeat(4, 15px);
+      grid-template-rows: repeat(4, 15px);
+      position: fixed;
+      z-index: 100;
+      left: calc(50vw - 20px);
+      top: calc(50vh + 100px);
     }
-    to {
-        transform: scale(.7);
-    }
-}
 
-@keyframes cursorAnim2 {
-    from {
-        transform: scale(1);
+    #cursor div {
+      background-color: white;
     }
-    to {
-        transform: scale(.4);
-    }
-}
 
-OLD CURSOR*/
+    @keyframes glow {
+      0% {
+        box-shadow: 0px 0px 3px wheat;
+      }
+
+      50% {
+        box-shadow: 0px 0px 12px wheat;
+      }
+
+      0% {
+        box-shadow: 0px 0px 3px wheat;
+      }
+    }
+
+    .glow {
+      animation: glow 2s infinite;
+    }
+
+    #N {
+      width: 2px;
+      height: 30px;
+      grid-column: 3;
+      grid-row: 1 / 4;
+    }
+
+
+    #S {
+      width: 2px;
+      height: 30px;
+      grid-column: 3;
+      grid-row: 3 / 4;
+    }
+
+
+    #E {
+      width: 30px;
+      height: 2px;
+      grid-column: 3 / 4;
+      grid-row: 3;
+    }
+
+
+    #W {
+      width: 30px;
+      height: 2px;
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+
+    #instructions {
+      position: fixed;
+      bottom: 20px;
+      width: 90%;
+      text-align: center;
+      margin-left: 5%;
+      font-family: "zarathustra", monospace;
+      color: white;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1000ms;
+    }
 
     #waveform {
       width: 100%;
@@ -229,7 +198,8 @@ OLD CURSOR*/
       user-select: none;
     }
 
-    #waveform:hover, #canvas:hover{
+    #waveform:hover,
+    #canvas:hover {
       opacity: 1;
     }
 
@@ -241,11 +211,9 @@ OLD CURSOR*/
       transform: translateY(-50%);
       opacity: 0.5;
     }
+  </style>
 
-</style>
-
-<script>
-
+  <script>
     /*when mouse moves:
     calculate the position of the mouse in the X axis
     normalize values from left and right.
@@ -285,8 +253,8 @@ OLD CURSOR*/
 
     const sound1 = new Howl({
       src: ['sound/pubbulupipo.mp3'],
-      loop:true,
-      volume:0,
+      loop: true,
+      volume: 0,
       pan: -1,
       onload: () => {
         sound1.fade(0, 0.5, 3000);
@@ -295,8 +263,8 @@ OLD CURSOR*/
 
     const sound2 = new Howl({
       src: ['sound/10minMix.mp3'],
-      loop:true,
-      volume:0,
+      loop: true,
+      volume: 0,
       pan: 1,
       onload: () => {
         sound2.fade(0, 0.5, 3000);
@@ -305,8 +273,8 @@ OLD CURSOR*/
 
     const sound3 = new Howl({
       src: ['sound/Altered_loves_unaltered.mp3'],
-      loop:true,
-      volume:0,
+      loop: true,
+      volume: 0,
       onload: () => {
         sound3.fade(0, 0.5, 3000);
       }
@@ -314,23 +282,23 @@ OLD CURSOR*/
 
     const sound4 = new Howl({
       src: ['sound/walk.mp3'],
-      loop:true,
-      volume:0,
+      loop: true,
+      volume: 0,
       onload: () => {
         sound4.fade(0, 0.5, 3000);
       }
     });
 
-    cursor.onmouseenter = function(){
+    cursor.onmouseenter = function() {
       console.log('enteredC');
       cursorWasPicked = true;
     }
 
-    cursor.ontouchstart = function(){
+    cursor.ontouchstart = function() {
       console.log('mobile: enteredC');
       cursorWasPicked = true;
     }
-
+    // NOT IN USE
     // Setup the "waveform" animation.
     // var wave = new SiriWave({
     //     container: waveform,
@@ -345,88 +313,84 @@ OLD CURSOR*/
     //resize();
     //window.addEventListener('resize', resize);
 
-    // TODO: update siriWave amplitude & other properties from sound level
-    // https://medium.com/swlh/building-a-audio-visualizer-with-javascript-324b8d420e7
-    // siriWave.setAmplitude(amplitue);
+    let runOnce = false;
+    onmousemove = function(e) {
+      onmove(e);
+    }
+    ontouchstart = function(e) {
+      e.clientX = e.touches[0].clientX;
+      e.clientY = e.touches[0].clientY;
+      console.log("mobile:touch")
+      onmove(e);
+    }
 
-      let runOnce = false;
-      onmousemove = function(e){
-        onmove(e);
-      }
-      ontouchstart = function(e){
-        e.clientX = e.touches[0].clientX;
-        e.clientY = e.touches[0].clientY;
-        console.log("mobile:touch")
-        onmove(e);
-      }
-
-      const changeTarget = document.getElementById("change")
-      const interval = setInterval(function() {
-        if (changeTarget.innerHTML == "fingertips") changeTarget.innerHTML = "  limbs   ";
-        else changeTarget.innerHTML  = "fingertips";
-      }, 2000);
+    const changeTarget = document.getElementById("change")
+    const interval = setInterval(function() {
+      if (changeTarget.innerHTML == "fingertips") changeTarget.innerHTML = "  limbs   ";
+      else changeTarget.innerHTML = "fingertips";
+    }, 2000);
 
 
-      function onmove(e){
-        if (cursorWasPicked){
-          if(runOnce === false){
-            clearInterval(interval);
-            document.body.style.cursor = 'none';
-            loadingBG.style.opacity = 0;
-            sound1.play();
-            sound2.play();
-            sound3.play();
-            sound4.play();
-            cN.classList.remove('glow');
-            cS.classList.remove('glow');
-            cE.classList.remove('glow');
-            cW.classList.remove('glow');
-            instructions.style.opacity = 0;
-            runOnce = true;
-          }
-
-          let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1);
-          let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0);
-          let top = mapRange(e.clientY, 0, window.innerHeight, 0,1);
-          let bottom =  (1 - top);
-
-          sound1.volume(left);
-          virgil.style.opacity = getOpacity(e.clientX, e.clientY, 0,0);
-
-          sound4.volume(bottom);
-          placeHolder.style.opacity = getOpacity(e.clientX, e.clientY, 0,1);
-
-          sound3.volume(top);
-          piene.style.opacity = getOpacity(e.clientX, e.clientY, 1,1);
-
-          sound2.volume(right);
-          snow.style.opacity = getOpacity(e.clientX, e.clientY, 1,0);
-
-          cursor.style.left = e.clientX + 'px';
-          cursor.style.top = e.clientY + 'px';
-
-          let transformN = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,50).toFixed(2);
-          cN.style.transform = `rotate(${transformN}deg) translateY(${transformN / 12}px)`;
-
-          let transformS = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0,210).toFixed(2);
-          cS.style.transform = `rotate(${transformS}deg) translateY(${transformS / 6}px)`;
-
-          let transformE = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,210).toFixed(2);
-          cE.style.transform = `rotate(${transformE}deg) translateX(${transformE / 6}px)`;
-
-          let transformW = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0,170).toFixed(2);
-          cW.style.transform = `rotate(${transformW}deg) translateX(${transformW / 10}px)`;
-
-
-          /* OLD CURSOR JS
-          let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
-          let borderCursor = 10;
-
-          cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
-          cursor.style.borderRadius = `${borderCursor}px`;
-          OLD CURSOR JS*/
+    function onmove(e) {
+      if (cursorWasPicked) {
+        if (runOnce === false) {
+          clearInterval(interval);
+          document.body.style.cursor = 'none';
+          loadingBG.style.opacity = 0;
+          sound1.play();
+          sound2.play();
+          sound3.play();
+          sound4.play();
+          cN.classList.remove('glow');
+          cS.classList.remove('glow');
+          cE.classList.remove('glow');
+          cW.classList.remove('glow');
+          instructions.style.opacity = 0;
+          runOnce = true;
         }
+
+        let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1);
+        let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0);
+        let top = mapRange(e.clientY, 0, window.innerHeight, 0, 1);
+        let bottom = (1 - top);
+
+        sound1.volume(left);
+        virgil.style.opacity = getOpacity(e.clientX, e.clientY, 0, 0);
+
+        sound4.volume(bottom);
+        placeHolder.style.opacity = getOpacity(e.clientX, e.clientY, 0, 1);
+
+        sound3.volume(top);
+        piene.style.opacity = getOpacity(e.clientX, e.clientY, 1, 1);
+
+        sound2.volume(right);
+        snow.style.opacity = getOpacity(e.clientX, e.clientY, 1, 0);
+
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+
+        let transformN = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0, 50).toFixed(2);
+        cN.style.transform = `rotate(${transformN}deg) translateY(${transformN / 12}px)`;
+
+        let transformS = mapRange(e.clientY, window.innerHeight / 2, window.innerHeight, 0, 210).toFixed(2);
+        cS.style.transform = `rotate(${transformS}deg) translateY(${transformS / 6}px)`;
+
+        let transformE = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0, 210).toFixed(2);
+        cE.style.transform = `rotate(${transformE}deg) translateX(${transformE / 6}px)`;
+
+        let transformW = mapRange(e.clientX, window.innerWidth / 2, window.innerWidth, 0, 170).toFixed(2);
+        cW.style.transform = `rotate(${transformW}deg) translateX(${transformW / 10}px)`;
+
+
+        /* OLD CURSOR JS
+        let colorCursor = mapRange(e.clientX, 0, window.innerWidth, 0, 150).toFixed(3);
+        let borderCursor = 10;
+
+        cursor.style.backgroundColor = `hsl(${colorCursor},40%,45%)`;
+        cursor.style.borderRadius = `${borderCursor}px`;
+        OLD CURSOR JS*/
       }
+    }
 
     // Update the height of the wave animation.
     // These are basically some hacks to get SiriWave.js to do what we want.
@@ -445,81 +409,83 @@ OLD CURSOR*/
     };
 
     //a map function like in p5js
-    function mapRange (value, a, b, c, d) {
-        // first map value from (a..b) to (0..1)
-        value = (value - a) / (b - a);
-        // then map it from (0..1) to (c..d) and return it
-        return c + value * (d - c);
+    function mapRange(value, a, b, c, d) {
+      // first map value from (a..b) to (0..1)
+      value = (value - a) / (b - a);
+      // then map it from (0..1) to (c..d) and return it
+      return c + value * (d - c);
     }
 
     function getOpacity(mouse_x, mouse_y, x, y) {
-     const d_x = mapRange(mouse_x/window.innerWidth, 0, 1, 1 - x, x);
-     const d_y = mapRange(mouse_y/window.innerHeight, 0, 1, 1 - y, y);
-     return d_x * d_y;
+      const d_x = mapRange(mouse_x / window.innerWidth, 0, 1, 1 - x, x);
+      const d_y = mapRange(mouse_y / window.innerHeight, 0, 1, 1 - y, y);
+      return d_x * d_y;
     }
 
-    function videoOnLoad(){
-      video ++;
-      if(video == 4) {
+    function videoOnLoad() {
+      video++;
+      if (video == 4) {
         // allow cursor to be picked only after all videos are loaded
         console.log("all videos loaded");
       }
     }
-</script>
-<script type="text/javascript">
-const WIDTH = window.innerWidth, HEIGHT = 300;
+  </script>
+  <script type="text/javascript">
+    const WIDTH = window.innerWidth,
+      HEIGHT = 300;
 
 
-//https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound
-var analyser = Howler.ctx.createAnalyser();
-analyser.fftSize = 1024;
-Howler.masterGain.connect(analyser);
-// Connect the analyser -> destination
-analyser.connect(Howler.ctx.destination);
-var bufferLength = analyser.frequencyBinCount;
-var dataArray = new Uint8Array(bufferLength);
+    //https://stackoverflow.com/questions/32460123/connect-analyzer-to-howler-sound
+    var analyser = Howler.ctx.createAnalyser();
+    analyser.fftSize = 1024;
+    Howler.masterGain.connect(analyser);
+    // Connect the analyser -> destination
+    analyser.connect(Howler.ctx.destination);
+    var bufferLength = analyser.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
 
-const canvas = document.getElementById('canvas');
-const canvasCtx = canvas.getContext("2d"); // 2d?
-canvasCtx.width  = window.innerWidth;
-canvas.width = window.innerWidth;
-var barWidth = (WIDTH / bufferLength) * 2.5;
-var barHeight;
+    const canvas = document.getElementById('canvas');
+    const canvasCtx = canvas.getContext("2d"); // 2d?
+    canvasCtx.width = window.innerWidth;
+    canvas.width = window.innerWidth;
+    var barWidth = (WIDTH / bufferLength) * 2.5;
+    var barHeight;
 
-//console.log(HEIGHT, WIDTH, dataArray);
+    //console.log(HEIGHT, WIDTH, dataArray);
 
-function drawBars() {
+    function drawBars() {
       drawVisual = requestAnimationFrame(drawBars);
       analyser.getByteFrequencyData(dataArray);
       //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
       var x = 0;
-       for(var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i]/2;
+      for (var i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] / 2;
         canvasCtx.fillStyle = 'rgb(255,255,255)';
         //canvasCtx.fillRect(x,HEIGHT/2,barWidth,barHeight);
-        canvasCtx.fillRect(x,HEIGHT/3,barWidth,barHeight);
+        canvasCtx.fillRect(x, HEIGHT / 3, barWidth, barHeight);
         x += barWidth + 1;
       }
-}
+    }
 
-function drawLines() {
+    function drawLines() {
       drawVisual = requestAnimationFrame(drawLines);
       analyser.getByteFrequencyData(dataArray);
       //canvasCtx.fillStyle = 'rgb(0, 0, 0)';
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
       var x = 0;
-      for(var i = 0; i < bufferLength; i++) {
+      for (var i = 0; i < bufferLength; i++) {
         canvasCtx.strokeStyle = "#FFF";
         canvasCtx.beginPath();
-        canvasCtx.moveTo(i,0);
+        canvasCtx.moveTo(i, 0);
         canvasCtx.lineTo(x, dataArray[i]);
         canvasCtx.stroke();
         x += barWidth + 1;
       }
-}
+    }
 
-drawLines();
+    drawLines();
+  </script>
+</body>
 
-</script>
-</body></html>
+</html>
