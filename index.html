@@ -244,7 +244,7 @@
     let cursorWasPicked = false;
 
     setTimeout(() => {
-      instructions.style.opacity = 0.8;
+      if (runOnce === false) instructions.style.opacity = 0.8;
     }, 5000);
 
     setTimeout(() => {
