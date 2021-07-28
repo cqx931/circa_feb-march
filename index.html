@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
         <title>circa 106 | February-March</title>
 
-        <meta name="viewport"
-            content="width=device-width,
+        <meta name="viewport" content="width=device-width,
 			initial-scale=1.0, maximum-scale=1.0,
 			minimum-scale=1.0, user-scalable=no">
     <script src="howler.min.js"></script>
-    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     </head>
 
     <body>
-      <div id='loading-bg'></div>
+      <div id="loading"><div id="title">
+        <span class="main">A Digital(-is) Wander</span><br><span class="sub">interchangeable scenes manipulated with the <i id="change">fingertips</i> within proper tolerances</span>
+      </div></div>
         <div id="cursor">
           <div id="N"></div>
           <div id="S"></div>
@@ -22,49 +23,75 @@
         </div>
         <!-- <div id="waveform"></div> -->
 
-        <video preload="auto" id="vid-snow" muted autoplay loop>
-           <source src="media_c/snow.webm"
-          type='video/webm;codecs="vp8, vorbis"'/>
-             <source src="media_c/snow.mp4"
-          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        <video onload="videoOnLoad" preload="auto" id="vid-snow" muted="" autoplay="" loop="">
+           <source src="media_c/snow.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+             <source src="media_c/snow.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video preload="auto" id="vid-virgil" muted autoplay loop>
-           <source src="media_c/virgil.webm"
-          type='video/webm;codecs="vp8, vorbis"'/>
-             <source src="media_c/virgil.mp4"
-          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        <video onload="videoOnLoad" preload="auto" id="vid-virgil" muted="" autoplay="" loop="">
+           <source src="media_c/virgil.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+             <source src="media_c/virgil.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video preload="auto" id="vid-piene" muted autoplay loop>
-        	 <source src="media_c/piene.webm"
-          type='video/webm;codecs="vp8, vorbis"'/>
-             <source src="media_c/piene.mp4"
-          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        <video onload="videoOnLoad" preload="auto" id="vid-piene" muted="" autoplay="" loop="">
+        	 <source src="media_c/piene.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+             <source src="media_c/piene.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
-        <video preload="auto" id="vid-new" muted autoplay loop >
-        	 <source src="media_c/clouds.webm"
-          type='video/webm;codecs="vp8, vorbis"'/>
-             <source src="media_c/clouds.mp4"
-          type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"'/>
+        <video onload="videoOnLoad" preload="auto" id="vid-new" muted="" autoplay="" loop="">
+        	 <source src="media_c/clouds.webm" type="video/webm;codecs=&quot;vp8, vorbis&quot;">
+             <source src="media_c/clouds.mp4" type="video/mp4;codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
         </video>
 
 
         <canvas id="canvas" width="1000px" height="200px"></canvas>
-    </body>
 
-</html>
+
+
 
 <style>
-
+@font-face {
+  font-family: "Gudea";
+  src: local("fonts/Gudea-Regular.ttf") format("truetype");
+  font-weight:  400;
+  font-style:   regular;
+}
+@font-face {
+  font-family: "zarathustra";
+  src: local("fonts/zarathustra.otf") format("otf");
+  font-weight:  400;
+}
     body{
         margin:0;
     }
 
-    #loading-bg{
-      background-color: #aaa;
+    #loading{
+      background-color: black;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
       transition: opacity 8s 2s;
+      text-align: center;
+      font-family: monospace;
+      color:white;
+    }
+    #title {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width:100vw;
+      transform: translateY(-50%);
+    }
+    #loading .main {
+      font-size: 32px;
+      font-family: "zarathustra", monospace;
+    }
+    #loading .sub {
+      font-family: "Gudea";
+      display:inline-block;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    #change {
+      width:105px;
+      display:inline-block;
     }
 
     video {
@@ -89,7 +116,7 @@
   position: fixed;
   z-index: 100;
   left: calc(50vw - 20px);
-  top: calc(50vh - 20px);
+  top: calc(50vh + 100px);
 }
 
 #cursor div{
@@ -211,6 +238,8 @@ OLD CURSOR*/
     Finally, map those values to the opacity of each video
     */
 
+    let video = 0;
+
     const virgil = document.getElementById('vid-virgil');
     const snow = document.getElementById('vid-snow');
     const piene = document.getElementById('vid-piene');
@@ -223,7 +252,7 @@ OLD CURSOR*/
     const cE = document.getElementById('E');
     const cW = document.getElementById('W');
 
-    const loadingBG = document.getElementById('loading-bg');
+    const loadingBG = document.getElementById('loading');
 
     let cursorWasPicked = false;
 
@@ -304,9 +333,17 @@ OLD CURSOR*/
         onmove(e);
       }
 
+      const changeTarget = document.getElementById("change")
+      const interval = setInterval(function() {
+        if (changeTarget.innerHTML == "fingertips") changeTarget.innerHTML = "  limbs   ";
+        else changeTarget.innerHTML  = "fingertips";
+      }, 2000);
+
+
       function onmove(e){
         if (cursorWasPicked){
           if(runOnce === false){
+            clearInterval(interval);
             document.body.style.cursor = 'none';
             loadingBG.style.opacity = 0;
             sound1.play();
@@ -316,13 +353,10 @@ OLD CURSOR*/
             runOnce = true;
           }
 
-
           let left = mapRange(e.clientX, 0, window.innerWidth, 0, 1);
           let right = mapRange(e.clientX, 0, window.innerWidth, 1, 0);
           let top = mapRange(e.clientY, 0, window.innerHeight, 0,1);
           let bottom =  (1 - top);
-
-          console.log(left, right, top, bottom);
 
           sound1.volume(left);
           virgil.style.opacity = getOpacity(e.clientX, e.clientY, 0,0);
@@ -335,7 +369,7 @@ OLD CURSOR*/
 
           sound2.volume(right);
           snow.style.opacity = getOpacity(e.clientX, e.clientY, 1,0);
-          console.log("virgil", virgil.style.opacity, "4", placeHolder.style.opacity, "piene", piene.style.opacity, "snow", snow.style.opacity)
+
           cursor.style.left = e.clientX + 'px';
           cursor.style.top = e.clientY + 'px';
 
@@ -391,6 +425,14 @@ OLD CURSOR*/
      const d_y = mapRange(mouse_y/window.innerHeight, 0, 1, 1 - y, y);
      return d_x * d_y;
     }
+
+    function videoOnLoad(){
+      video ++;
+      if(video == 4) {
+        // allow cursor to be picked only after all videos are loaded
+        console.log("all videos loaded");
+      }
+    }
 </script>
 <script type="text/javascript">
 const WIDTH = window.innerWidth, HEIGHT = 300;
@@ -409,7 +451,7 @@ const canvasCtx = canvas.getContext("2d"); // 2d?
 var barWidth = (WIDTH / bufferLength) * 2.5;
 var barHeight;
 
-console.log(HEIGHT, WIDTH, dataArray);
+//console.log(HEIGHT, WIDTH, dataArray);
 
 function drawBars() {
       drawVisual = requestAnimationFrame(drawBars);
@@ -445,3 +487,4 @@ function drawLines() {
 drawLines();
 
 </script>
+</body></html>
